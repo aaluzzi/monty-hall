@@ -1,8 +1,11 @@
 import { useState } from 'react'
+import Stats from './components/Stats'
 import Door from './components/Door'
 import Button from './components/Button'
 
 function App() {
+  const [wins, setWins] = useState(0);
+  const [losses, setLosses] = useState(0);
   const [status, setStatus] = useState("selecting");
   const [message, setMessage] = useState("One door contains a car. The other two have goats. Select a door.")
   const [doorsContents, setDoorsContents] = useState(getRandomDoorsContents());
@@ -44,8 +47,10 @@ function App() {
     setDoorsOpened([true, true, true]);
     if (doorsContents[finalDoorSelectionIndex] === "Car") {
       setMessage("Car acquired! You win!");
+      setWins(oldWins => oldWins + 1);
     } else {
       setMessage("You selected a goat. You lose.")
+      setLosses(oldLosses => oldLosses + 1);
     }
     setStatus("ended");
   }
@@ -60,6 +65,7 @@ function App() {
 
   return (
     <div className="flex flex-col gap-8 items-center justify-center">
+      <Stats wins={wins} losses={losses}/>
       <div className="flex gap-8 justify-center">
         <Door content={doorsContents[0]} selected={selectedDoorIndex == 0} select={selectedDoorIndex === -1 ? (() => onInitialDoorSelection(0)) : null} opened={doorsOpened[0]}/>
         <Door content={doorsContents[1]} selected={selectedDoorIndex == 1} select={selectedDoorIndex === -1 ? (() => onInitialDoorSelection(1)) : null} opened={doorsOpened[1]}/>
