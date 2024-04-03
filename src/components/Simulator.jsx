@@ -1,36 +1,43 @@
 import Button from "./Button";
 import { useState, useEffect } from 'react';
 
-function Simulator({ onInitialDoorSelection, switchSelection, restartGame }) {
-    const [switchDoor, setSwitchDoor] = useState(false);
+function Simulator({ clickDoorElement, clickSwitchYesButton, clickSwitchNoButton, clickRestartButton }) {
+    const [switchDoors, setSwitchDoors] = useState(false);
     const [iterationRunning, setIterationRunning] = useState(false);
+    const [iterationCount, setIterationCount] = useState(0);
+    const [iterationRuntime, setIterationRuntime] = useState(0);
 
     const start = () => {
-        setIterationRunning(true);
+        const totalRunningTime = 10000;
+        const iterations = 30;
+        setIterationCount(iterations);
+        setIterationRuntime(totalRunningTime / iterations);
     }
 
     useEffect(() => {
-        if (iterationRunning) {
-            let totalRunningTime = 3000;
-            let iterationCount = 1;
-            let iterationRunTime = totalRunningTime / iterationCount;
-            runIteration(iterationRunTime);
+        if (iterationCount > 0) {
+            runIteration();
         }
-    }, [iterationRunning]);
+        
+    }, [iterationCount]);
 
-    const runIteration = async (iterationRunTime) => {
+    const runIteration = async () => {
         const selectedDoorIndex = Math.floor(Math.random() * 3);
-        onInitialDoorSelection(selectedDoorIndex);
-        await delay(iterationRunTime / 3);
-        switchSelection(selectedDoorIndex);
-        await delay(iterationRunTime / 3);
-        restartGame();
-        await delay(iterationRunTime / 3);
-        setIterationRunning(false); // Stop the iteration after completing one run
+        clickDoorElement(selectedDoorIndex);
+        await delay(iterationRuntime / 3);
+        if (switchDoors) {
+            clickSwitchYesButton();
+        } else {
+            clickSwitchNoButton();
+        }
+        await delay(iterationRuntime / 3);
+        clickRestartButton();
+        await delay(iterationRuntime / 3);
+        setIterationCount(count => count - 1);
     }
 
     const handleSwitchChange = () => {
-        setSwitchDoor(!switchDoor);
+        setSwitchDoors(!switchDoors);
     }
 
     return (
@@ -38,7 +45,7 @@ function Simulator({ onInitialDoorSelection, switchSelection, restartGame }) {
             <h1 className="text-xl w-full">Simulator</h1>
             <div className="flex flex-col bg-slate-700 rounded-md p-4 gap-2">
                 <div>
-                    <input type="checkbox" id="switch" name="switch" checked={switchDoor} onChange={handleSwitchChange} />
+                    <input className="m-1" type="checkbox" id="switch" name="switch" checked={switchDoors} onChange={handleSwitchChange} />
                     <label htmlFor="switch">Switch Doors</label>
                 </div>
                 <Button onClick={start} text="Start" />

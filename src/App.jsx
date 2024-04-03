@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import Stats from './components/Stats'
 import Door from './components/Door'
 import Button from './components/Button'
@@ -12,6 +12,11 @@ function App() {
   const [doorsContents, setDoorsContents] = useState(getRandomDoorsContents());
   const [doorsOpened, setDoorsOpened] = useState([false, false, false]);
   const [selectedDoorIndex, setSelectedDoorIndex] = useState(-1);
+
+  const doorDivRefs = [useRef(), useRef(), useRef()];
+  const yesButtonRef = useRef();
+  const noButtonRef = useRef();
+  const restartButtonRef = useRef();
 
   const restartGame = () => {
     setDoorsContents(getRandomDoorsContents());
@@ -40,8 +45,6 @@ function App() {
 
   const switchSelection = () => {
     const otherClosedDoorIndex = getOtherClosedDoorIndex();
-    console.log(selectedDoorIndex);
-    //console.log(otherClosedDoorIndex);
     setSelectedDoorIndex(otherClosedDoorIndex);
     revealDoors(otherClosedDoorIndex);
   }
@@ -66,21 +69,38 @@ function App() {
     return otherIndex;
   }
 
+  const clickDoorElement = (index) => {
+    doorDivRefs[index].current.click();
+  }
+
+  const clickSwitchYesButton = () => {
+    yesButtonRef.current.click();
+  }
+
+  const clickSwitchNoButton = () => {
+    noButtonRef.current.click();
+  }
+
+  const clickRestartButton = () => {
+    restartButtonRef.current.click();
+  }
+
+
   return (
     <div className="flex flex-col gap-8 items-center justify-center">
       <Stats wins={wins} losses={losses}/>
       <div className="flex gap-8 justify-center">
-        <Door content={doorsContents[0]} selected={selectedDoorIndex == 0} select={selectedDoorIndex === -1 ? (() => onInitialDoorSelection(0)) : null} opened={doorsOpened[0]}/>
-        <Door content={doorsContents[1]} selected={selectedDoorIndex == 1} select={selectedDoorIndex === -1 ? (() => onInitialDoorSelection(1)) : null} opened={doorsOpened[1]}/>
-        <Door content={doorsContents[2]} selected={selectedDoorIndex == 2} select={selectedDoorIndex === -1 ? (() => onInitialDoorSelection(2)) : null} opened={doorsOpened[2]}/>
+        <Door innerRef={doorDivRefs[0]} content={doorsContents[0]} selected={selectedDoorIndex == 0} select={selectedDoorIndex === -1 ? (() => onInitialDoorSelection(0)) : null} opened={doorsOpened[0]}/>
+        <Door innerRef={doorDivRefs[1]} content={doorsContents[1]} selected={selectedDoorIndex == 1} select={selectedDoorIndex === -1 ? (() => onInitialDoorSelection(1)) : null} opened={doorsOpened[1]}/>
+        <Door innerRef={doorDivRefs[2]} content={doorsContents[2]} selected={selectedDoorIndex == 2} select={selectedDoorIndex === -1 ? (() => onInitialDoorSelection(2)) : null} opened={doorsOpened[2]}/>
       </div>
       <h1 className="text-xl">{message}</h1>
       <div className="h-12 flex gap-3">
-        {status === "switching" ? <Button onClick={switchSelection} text="Yes" /> : null}
-        {status === "switching" ? <Button onClick={() => revealDoors(selectedDoorIndex)} text="No"/> : null}
-        {status === "ended" ? <Button onClick={restartGame} text="Restart" /> : null}
+        {status === "switching" ? <Button innerRef={yesButtonRef} onClick={switchSelection} text="Yes" /> : null}
+        {status === "switching" ? <Button innerRef={noButtonRef} onClick={() => revealDoors(selectedDoorIndex)} text="No"/> : null}
+        {status === "ended" ? <Button innerRef={restartButtonRef} onClick={restartGame} text="Restart" /> : null}
       </div>
-      <Simulator onInitialDoorSelection={onInitialDoorSelection} switchSelection={switchSelection} revealDoors={revealDoors} restartGame={restartGame} />
+      <Simulator clickDoorElement={clickDoorElement} clickSwitchYesButton={clickSwitchYesButton} clickSwitchNoButton={clickSwitchNoButton} clickRestartButton={clickRestartButton} />
     </div>
   )
 }
