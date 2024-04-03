@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Stats from './components/Stats'
 import Door from './components/Door'
 import Button from './components/Button'
+import Simulator from './components/Simulator';
 
 function App() {
   const [wins, setWins] = useState(0);
@@ -37,8 +38,10 @@ function App() {
     setDoorsOpened(newDoorsOpened);
   }
 
-  const switchSelection = () => {getOtherClosedDoorIndex()
+  const switchSelection = () => {
     const otherClosedDoorIndex = getOtherClosedDoorIndex();
+    console.log(selectedDoorIndex);
+    //console.log(otherClosedDoorIndex);
     setSelectedDoorIndex(otherClosedDoorIndex);
     revealDoors(otherClosedDoorIndex);
   }
@@ -77,6 +80,7 @@ function App() {
         {status === "switching" ? <Button onClick={() => revealDoors(selectedDoorIndex)} text="No"/> : null}
         {status === "ended" ? <Button onClick={restartGame} text="Restart" /> : null}
       </div>
+      <Simulator onInitialDoorSelection={onInitialDoorSelection} switchSelection={switchSelection} revealDoors={revealDoors} restartGame={restartGame} />
     </div>
   )
 }
@@ -88,4 +92,4 @@ function getRandomDoorsContents() {
   return doorsContents;
 }
 
-export default App
+export default App;
