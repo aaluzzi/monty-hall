@@ -87,18 +87,20 @@ function App() {
 
 
   return (
-    <div className="flex flex-col gap-8 items-center justify-center">
+    <div className="h-full gap-4 flex flex-col items-center justify-between">
       <Stats wins={wins} losses={losses}/>
       <div className="flex gap-8 justify-center">
         <Door innerRef={doorDivRefs[0]} content={doorsContents[0]} selected={selectedDoorIndex == 0} select={selectedDoorIndex === -1 ? (() => onInitialDoorSelection(0)) : null} opened={doorsOpened[0]}/>
         <Door innerRef={doorDivRefs[1]} content={doorsContents[1]} selected={selectedDoorIndex == 1} select={selectedDoorIndex === -1 ? (() => onInitialDoorSelection(1)) : null} opened={doorsOpened[1]}/>
         <Door innerRef={doorDivRefs[2]} content={doorsContents[2]} selected={selectedDoorIndex == 2} select={selectedDoorIndex === -1 ? (() => onInitialDoorSelection(2)) : null} opened={doorsOpened[2]}/>
       </div>
-      <h1 className="text-xl">{message}</h1>
-      <div className="h-12 flex gap-3">
-        {status === "switching" ? <Button innerRef={yesButtonRef} onClick={switchSelection} text="Yes" /> : null}
-        {status === "switching" ? <Button innerRef={noButtonRef} onClick={() => revealDoors(selectedDoorIndex)} text="No"/> : null}
-        {status === "ended" ? <Button innerRef={restartButtonRef} onClick={restartGame} text="Restart" /> : null}
+      <div className="flex flex-col items-center gap-2">
+        <h1 className="h-14 text-lg flex items-center">{message}</h1>
+        <div className="h-12 flex gap-3">
+          {status === "switching" ? <Button innerRef={yesButtonRef} onClick={switchSelection} text="Yes" /> : null}
+          {status === "switching" ? <Button innerRef={noButtonRef} onClick={() => revealDoors(selectedDoorIndex)} text="No"/> : null}
+          {status === "ended" ? <Button innerRef={restartButtonRef} onClick={restartGame} text="Restart" /> : null}
+        </div>
       </div>
       <Simulator clickDoorElement={clickDoorElement} clickSwitchYesButton={clickSwitchYesButton} clickSwitchNoButton={clickSwitchNoButton} clickRestartButton={clickRestartButton} />
     </div>

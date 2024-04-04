@@ -1,6 +1,6 @@
 function Stats({wins, losses}) {
     return (
-        <div className="rounded-lg w-[396px] p-4 shadow-lg text-lg flex gap-4 bg-slate-800">
+        <div className="rounded-lg w-[350px] p-4 shadow-lg text-lg flex gap-4 bg-slate-800">
             <Stat label="Wins" stat={wins} />
             <Stat label="Losses" stat={losses} />
             <Stat label="Winrate"stat={getWinRate(wins, losses) + "%"} />

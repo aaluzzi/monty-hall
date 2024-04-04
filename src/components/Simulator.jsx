@@ -43,8 +43,7 @@ function Simulator({ clickDoorElement, clickSwitchYesButton, clickSwitchNoButton
 
 	return (
 		<div className="flex flex-col bg-slate-800 p-4 rounded-lg gap-2">
-			<h1 className="text-xl w-full">Simulator</h1>
-			<div className="flex flex-col justify-start bg-slate-700 rounded-md p-4 gap-4">
+			<div className="flex flex-col justify-start bg-slate-700 rounded-md p-4 gap-3">
 				<div className="flex flex-col text-left">
 					<label htmlFor="iterations">Iteration Count</label>
 					<input
@@ -60,7 +59,7 @@ function Simulator({ clickDoorElement, clickSwitchYesButton, clickSwitchNoButton
 				</div>
 				<div>
 					<input
-						className="m-1"
+						className="m-1 p-2 bg-red-700 rounded"
 						type="checkbox"
 						id="switch"
 						name="switch"
@@ -69,7 +68,7 @@ function Simulator({ clickDoorElement, clickSwitchYesButton, clickSwitchNoButton
 					/>
 					<label htmlFor="switch">Switch Doors</label>
 				</div>
-				<Button onClick={toggle} text={!iterationRunning ? "Start" : "Stop"} />
+				<Button onClick={toggle} text={!iterationRunning ? "Simulate" : "Stop"} />
 			</div>
 		</div>
 	);
